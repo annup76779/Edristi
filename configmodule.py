@@ -9,9 +9,6 @@ class Config(object):
 
     # Database Stuff is done here
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    with open(os.path.join(os.path.abspath(os.path.dirname(__name__)), "config.json"),\
-         "r", encoding="utf-8") as config:
-         config = json.load(config)
 
     # setting the database URI
     SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{username}:{password}@{host}:{port}/{database_name}".format(**config)
@@ -30,9 +27,16 @@ class Config(object):
 
 class Development(Config):
     SQLALCHEMY_ECHO = True
+    with open(os.path.join(os.path.abspath(os.path.dirname(__name__)), "config.json"),\
+         "r", encoding="utf-8") as config:
+         config = json.load(config)
+    
+    # setting the database URI
+    SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{username}:{password}@{host}:{port}/{database_name}".format(**config)
 
 class Production(Config):
     SQLALCHEMY_ECHO = False
+    os.environ.get("DATABASE_URL")
 
 class Testing(Config):
     TESTING = True
